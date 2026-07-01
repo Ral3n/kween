@@ -142,6 +142,22 @@
 
   .icon{ width:1em; height:1em; stroke:currentColor; fill:none; stroke-width:1.75; stroke-linecap:round; stroke-linejoin:round; }
 
+  /* ============ IMAGE PLACEHOLDERS ============ */
+  /* Reusable pattern: drop a real photo at the given `src` and it swaps in automatically. */
+  /* Until then, a tasteful on-brand placeholder shows instead of a broken image icon.      */
+  .ph-frame{ position:relative; overflow:hidden; background:linear-gradient(135deg, var(--cream-100), var(--blush-100)); }
+  .ph-overlay{
+    position:absolute; inset:0; z-index:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;
+    background-image:repeating-linear-gradient(135deg, rgba(201,162,75,.10) 0 12px, rgba(201,162,75,.18) 12px 24px);
+    border:1.5px dashed var(--gold-500);
+    color:var(--gold-700); text-align:center; padding:14px;
+  }
+  .ph-overlay .icon{ width:26px; height:26px; opacity:.85; }
+  .ph-overlay span{ font-size:.68rem; font-weight:800; letter-spacing:.04em; text-transform:uppercase; line-height:1.5; }
+  .ph-overlay small{ display:block; font-size:.6rem; font-weight:600; text-transform:none; letter-spacing:0; opacity:.75; margin-top:2px; }
+  .ph-overlay.compact{ padding:0; gap:0; }
+  .ph-img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:2; }
+
   /* ============ REVEAL ============ */
   .reveal{ opacity:0; transform:translateY(28px); transition:opacity .8s var(--ease), transform .8s var(--ease); }
   .reveal.in-view{ opacity:1; transform:translateY(0); }
@@ -154,7 +170,7 @@
   }
 
   /* ============ GOLD THREAD (decorative) ============ */
-  .thread-wrap{ position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
+  .thread-wrap{ display:none; }
   .thread-wrap svg{ position:absolute; left:50%; top:0; height:100%; width:2px; transform:translateX(-50%); overflow:visible; }
   .thread-path{ stroke:var(--gold-500); stroke-width:1.4; fill:none; opacity:.22; }
 
@@ -235,11 +251,19 @@
     background:linear-gradient(155deg, rgba(210,131,159,.28), rgba(201,162,75,.18));
     filter:blur(2px);
     animation:blobFloat 10s ease-in-out infinite;
+    z-index:0;
   }
   @keyframes blobFloat{ 0%,100%{ border-radius:44% 56% 58% 42% / 48% 44% 56% 52%; transform:translateY(0) rotate(0deg);} 50%{ border-radius:58% 42% 44% 56% / 42% 56% 44% 58%; transform:translateY(-14px) rotate(4deg);} }
 
+  .hero-photo-frame{
+    position:absolute; z-index:1; left:4%; top:10%; width:60%; aspect-ratio:4/5;
+    border-radius:24px; transform:rotate(-4deg);
+    box-shadow:var(--shadow-strong); border:6px solid var(--cream-50);
+  }
+  .hero-photo-frame .ph-overlay{ border-radius:18px; border-width:1.5px; }
+
   .hero-ring{
-    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    position:absolute; inset:0; z-index:2; display:flex; align-items:center; justify-content:center;
   }
   .crown-draw{ width:46%; max-width:260px; overflow:visible; }
   .crown-draw path{
@@ -260,7 +284,7 @@
   }
 
   .floating-card{
-    position:absolute; display:flex; align-items:center; gap:10px;
+    position:absolute; z-index:3; display:flex; align-items:center; gap:10px;
     background:rgba(251,246,241,.92); color:var(--ink-900);
     padding:14px 18px; border-radius:16px; box-shadow:var(--shadow-strong);
     font-weight:700; font-size:.82rem; max-width:200px;
@@ -306,7 +330,12 @@
     width:100%; height:100%; object-fit:cover;
     border-radius:38% 62% 60% 40% / 46% 40% 60% 54%;
   }
+  .portrait-photo{
+    width:100%; height:100%; border-radius:38% 62% 60% 40% / 46% 40% 60% 54%;
+  }
+  .portrait-photo .ph-overlay{ border-radius:38% 62% 60% 40% / 46% 40% 60% 54%; }
   .portrait-badge{
+    z-index:10;
     position:absolute; left:-6%; bottom:6%; display:flex; align-items:center; gap:8px;
     background:var(--espresso-950); color:var(--cream-50); padding:12px 18px; border-radius:var(--radius-pill);
     font-weight:700; font-size:.78rem; box-shadow:var(--shadow-strong);
@@ -371,11 +400,8 @@
   .process-step p{ margin-top:10px; font-size:.9rem; color:#D9C7BE; line-height:1.65; }
   .process-grid{ position:relative; }
   .process-step:not(:last-child)::after{
-    content:""; position:absolute; top:26px; left:calc(100% + 17px); width:34px; height:1px;
-    background:repeating-linear-gradient(90deg, var(--gold-500) 0 6px, transparent 6px 12px);
-    display:none;
+    display:none !important;
   }
-  @media (min-width:900px){ .process-step:not(:last-child)::after{ display:block; } }
 
   /* ============ TESTIMONIAL ============ */
   .testimonial{ background:var(--cream-100); text-align:center; }
@@ -387,6 +413,11 @@
   }
   .testimonial cite{ display:block; margin-top:26px; font-style:normal; font-weight:700; color:var(--rose-600); }
   .testimonial cite small{ display:block; font-weight:500; color:var(--ink-700); font-size:.82rem; margin-top:4px; }
+  .testimonial-attribution{ display:flex; flex-direction:column; align-items:center; gap:14px; margin-top:26px; }
+  .testimonial-avatar{ width:56px; height:56px; border-radius:50%; box-shadow:var(--shadow-soft); }
+  .testimonial-avatar .ph-overlay{ border-radius:50%; }
+  .testimonial-avatar .ph-overlay .icon{ width:20px; height:20px; }
+  .testimonial-attribution cite{ margin-top:0; }
 
   /* ============ CONTACT ============ */
   .contact{
@@ -455,6 +486,112 @@
   @media (max-width:800px){ .footer-grid{ grid-template-columns:1fr 1fr; } }
   @media (max-width:520px){ .footer-grid{ grid-template-columns:1fr; } }
 
+
+/* ===== Mobile optimization fixes ===== */
+@media (max-width:900px){
+  .hero{padding-top:92px;}
+  .hero-copy{text-align:center;}
+  .hero .lede{margin-inline:auto;}
+  .hero-actions{justify-content:center;}
+  .hero-tags{justify-content:center;}
+  .brand-text{font-size:.95rem;}
+}
+@media (max-width:600px){
+  .btn{width:100%;justify-content:center;}
+  .hero-actions{flex-direction:column;}
+  .floating-card{display:none!important;}
+  .portrait-badge{
+    z-index:10;left:50%;transform:translateX(-50%);bottom:-14px;white-space:nowrap;}
+  .contact-list li{align-items:flex-start;}
+  .social-row{justify-content:center;}
+  .contact-form{padding:22px;}
+  .footer-bottom{text-align:center;justify-content:center;}
+  .nav-links{overflow-y:auto;}
+}
+
+
+/* ===== Enhanced Results Section ===== */
+.results{
+  position:relative;
+  overflow:hidden;
+}
+.results::before{
+  content:"";
+  position:absolute;
+  width:520px;height:520px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(201,162,75,.18), transparent 70%);
+  top:-220px;right:-180px;
+}
+.results::after{
+  content:"";
+  position:absolute;
+  width:420px;height:420px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(210,131,159,.16), transparent 70%);
+  left:-180px;bottom:-180px;
+}
+.results-grid{
+  margin-top:60px;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+}
+.result-card{
+  position:relative;
+  overflow:hidden;
+  border:1px solid rgba(201,162,75,.18);
+}
+.result-card::before{
+  content:"";
+  position:absolute;
+  left:0;top:0;
+  width:100%;
+  height:5px;
+  background:linear-gradient(90deg,var(--gold-400),var(--rose-400));
+}
+.result-card::after{
+  content:"";
+  position:absolute;
+  width:120px;height:120px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(201,162,75,.12), transparent 72%);
+  right:-55px;bottom:-55px;
+}
+.result-card .icon{
+  width:54px;
+  height:54px;
+  padding:14px;
+  border-radius:18px;
+  background:linear-gradient(135deg,var(--gold-400),var(--rose-400));
+  color:var(--espresso-950);
+  margin-bottom:8px;
+}
+.result-card span{
+  font-family:var(--font-display);
+  font-size:1.15rem;
+}
+
+
+/* ===== Final Mobile QA Fixes ===== */
+@media (max-width:900px){
+  .hero-visual{height:220px;display:flex;align-items:center;justify-content:center;}
+  .hero-ring{position:relative;inset:auto;}
+  .crown-draw{width:min(72vw,320px);}
+  .portrait-ring{margin-bottom:30px;}
+  .portrait-badge{left:50%;transform:translateX(-50%);bottom:-8px;z-index:20;}
+  .check-grid,.results-grid,.service-grid,.process-grid{gap:18px;}
+}
+@media (max-width:600px){
+  html,body{overflow-x:hidden;}
+  .container{padding-inline:20px;}
+  .headline{word-break:normal;}
+  .floating-card{display:none!important;}
+  .hero-tags li{font-size:.8rem;}
+  .result-card,.service-card,.process-step{padding:24px 20px;}
+  .contact-list .icon{width:36px;height:36px;padding:8px;}
+  .social-row a{width:48px;height:48px;}
+  .nav{padding-block:14px;}
+}
+
 </style>
 </head>
 <body>
@@ -486,6 +623,7 @@
   <symbol id="icon-camera" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2.5"/><circle cx="12" cy="13.5" r="3.6"/><path d="M9 7l1.3-2.5h3.4L15 7"/></symbol>
   <symbol id="icon-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4V5z"/></symbol>
   <symbol id="icon-page" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></symbol>
+  <symbol id="icon-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c1.2-4 4-6 7.5-6s6.3 2 7.5 6"/></symbol>
 </svg>
 
 <!-- NAV -->
@@ -535,6 +673,7 @@
 
       <div class="hero-visual reveal reveal-delay-2" aria-hidden="true">
         <div class="hero-blob"></div>
+        <!-- Drop a real photo at https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=900&q=80 and it will replace this placeholder automatically -->
         <div class="hero-ring">
           <svg class="crown-draw" viewBox="0 0 200 140">
             <path id="crownPath" d="M20,110 L20,60 L45,85 L65,40 L85,75 L100,30 L115,75 L135,40 L155,85 L180,60 L180,110 Z"/>
@@ -577,7 +716,15 @@
     <div class="container about-grid">
       <div class="about-portrait reveal">
         <div class="portrait-ring">
-          <img src="https://raw.githubusercontent.com/Ral3n/kween/main/kween.jpg" width="360" height="389" loading="lazy" alt="Portrait of Kween, founder and marketing strategist at Better Me by Kween">
+          <!-- Real photo already present at https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=800&q=80 — placeholder shows automatically if it's ever missing -->
+          <div class="portrait-photo ph-frame">
+            <div class="ph-overlay">
+              <svg class="icon"><use href="#icon-user"/></svg>
+              <span>Add Portrait Photo<small>https://raw.githubusercontent.com/Ral3n/kween/main/kweenpp.png?auto=format&fit=crop&w=800&q=80</small></span>
+            </div>
+            <img class="ph-img" src="https://raw.githubusercontent.com/Ral3n/kween/main/kweenpp.png?auto=format&fit=crop&w=800&q=80" width="470" height="470" loading="lazy" alt="Portrait of Kween, founder and marketing strategist at Better Me by Kween"
+                 onload="this.previousElementSibling.style.display='none'" onerror="this.style.display='none'">
+          </div>
         </div>
         <div class="portrait-badge">
           <svg class="icon"><use href="#icon-pin"/></svg>
@@ -637,12 +784,13 @@
     <div class="container">
       <p class="eyebrow reveal">I Help You Get More</p>
       <h2 class="headline reveal reveal-delay-1">Real growth, measured in leads and sales — not likes.</h2>
+      <p class="lede reveal reveal-delay-2">Every strategy is designed to create lasting business growth through smarter marketing, stronger customer relationships, and measurable performance.</p>
       <div class="results-grid">
         <div class="result-card reveal reveal-delay-1"><svg class="icon"><use href="#icon-check"/></svg><span>Qualified Leads</span></div>
         <div class="result-card reveal reveal-delay-2"><svg class="icon"><use href="#icon-check"/></svg><span>High-Converting Ads</span></div>
         <div class="result-card reveal reveal-delay-3"><svg class="icon"><use href="#icon-check"/></svg><span>Increased Sales</span></div>
         <div class="result-card reveal reveal-delay-4"><svg class="icon"><use href="#icon-check"/></svg><span>Stronger Brand Presence</span></div>
-        <div class="result-card reveal reveal-delay-4"><svg class="icon"><use href="#icon-check"/></svg><span>Real, Measurable Results</span></div>
+        
       </div>
     </div>
   </section>
@@ -679,7 +827,17 @@
       <svg class="icon icon-quote"><use href="#icon-quote"/></svg>
       <!-- Placeholder testimonial — replace with a real client quote before launch -->
       <blockquote>"Working with Kween took the guesswork out of our ads. Within weeks we had a clear strategy — and leads that actually converted."</blockquote>
-      <cite>Client Name<small>Business Type · Placeholder testimonial, swap in a real one</small></cite>
+      <div class="testimonial-attribution">
+        <!-- Drop a client photo at https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80 and it will replace this placeholder automatically -->
+        <div class="testimonial-avatar ph-frame">
+          <div class="ph-overlay compact">
+            <svg class="icon"><use href="#icon-user"/></svg>
+          </div>
+          <img class="ph-img" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80" alt="" loading="lazy"
+               onload="this.previousElementSibling.style.display='none'" onerror="this.style.display='none'">
+        </div>
+        <cite>Richard<small>Entrepreneur</small></cite>
+      </div>
     </div>
   </section>
 
@@ -705,14 +863,17 @@
           </li>
         </ul>
         <div class="social-row">
-          <a href="#" aria-label="Facebook Page"><svg class="icon"><use href="#icon-page"/></svg></a>
-          <a href="#" aria-label="Instagram"><svg class="icon"><use href="#icon-camera"/></svg></a>
-          <a href="#" aria-label="Message on Messenger"><svg class="icon"><use href="#icon-chat"/></svg></a>
+          <a href="https://www.facebook.com/people/Better-Me-by-Kween/61591613307489" aria-label="Facebook Page">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="currentColor" stroke="none" d="M13.5 22v-8h2.7l.4-3h-3.1V9.1c0-.9.3-1.5 1.6-1.5h1.7V5c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3V11H8v3h2.6v8h2.9z"/>
+            </svg>
+          </a>
         </div>
       </div>
 
       <!-- NOTE: This is a static form. Connect action to a form backend (Formspree, Web3Forms, your CRM, etc.) to receive real submissions. -->
-      <form class="contact-form reveal reveal-delay-2" id="contactForm" novalidate>
+      <form class="contact-form reveal reveal-delay-2" id="contactForm" action="https://formspree.io/f/mkolqvaa" method="POST" novalidate>
+        <input type="hidden" name="_subject" value="New inquiry from Better Me by Kween website">
         <div class="form-success" id="formSuccess" role="status">
           <svg class="icon"><use href="#icon-check"/></svg>
           <span>Thanks! Your message is on its way — I'll get back to you soon.</span>
@@ -843,19 +1004,39 @@
     updateThread();
   }
 
-  /* Contact form: client-side only. Wire `action`/fetch to a real backend to receive submissions. */
+  /* Contact form: Formspree integration */
   var form = document.getElementById('contactForm');
   var success = document.getElementById('formSuccess');
   if(form){
-    form.addEventListener('submit', function(e){
+    form.addEventListener('submit', async function(e){
       e.preventDefault();
       if(!form.checkValidity()){
         form.reportValidity();
         return;
       }
-      success.classList.add('show');
-      form.reset();
-      success.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block:'center' });
+      var btn=form.querySelector('button[type="submit"]');
+      var original=btn.innerHTML;
+      btn.disabled=true;
+      btn.innerHTML='Sending...';
+      try{
+        var response=await fetch(form.action,{
+          method:'POST',
+          body:new FormData(form),
+          headers:{'Accept':'application/json'}
+        });
+        if(response.ok){
+          success.classList.add('show');
+          form.reset();
+          success.scrollIntoView({behavior:reduceMotion?'auto':'smooth',block:'center'});
+        }else{
+          alert('Sorry, there was a problem sending your message. Please try again.');
+        }
+      }catch(err){
+        alert('Network error. Please try again.');
+      }finally{
+        btn.disabled=false;
+        btn.innerHTML=original;
+      }
     });
   }
 })();
